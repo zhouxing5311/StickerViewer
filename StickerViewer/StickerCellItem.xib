@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="22505" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+    <dependencies>
+        <deployment identifier="macosx"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="22505"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <customObject id="-2" userLabel="File's Owner" customClass="StickerCellItem">
+            <connections>
+                <outlet property="stickerImageView" destination="ZsO-Kq-y9F" id="o4f-wj-ceU"/>
+                <outlet property="view" destination="Hz6-mo-xeY" id="0bl-1N-x8E"/>
+            </connections>
+        </customObject>
+        <customObject id="-1" userLabel="First Responder" customClass="FirstResponder"/>
+        <customObject id="-3" userLabel="Application" customClass="NSObject"/>
+        <customView id="Hz6-mo-xeY">
+            <rect key="frame" x="0.0" y="0.0" width="100" height="100"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+            <subviews>
+                <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="ZsO-Kq-y9F">
+                    <rect key="frame" x="0.0" y="0.0" width="100" height="100"/>
+                    <imageCell key="cell" refusesFirstResponder="YES" alignment="left" animates="YES" imageScaling="proportionallyDown" id="NeB-kT-euz"/>
+                </imageView>
+            </subviews>
+            <constraints>
+                <constraint firstAttribute="trailing" secondItem="ZsO-Kq-y9F" secondAttribute="trailing" id="0Wg-Yq-VLO"/>
+                <constraint firstItem="ZsO-Kq-y9F" firstAttribute="top" secondItem="Hz6-mo-xeY" secondAttribute="top" id="cvW-fP-c32"/>
+                <constraint firstAttribute="bottom" secondItem="ZsO-Kq-y9F" secondAttribute="bottom" id="kef-Mz-nU5"/>
+                <constraint firstItem="ZsO-Kq-y9F" firstAttribute="leading" secondItem="Hz6-mo-xeY" secondAttribute="leading" id="sqe-BY-SJr"/>
+            </constraints>
+            <point key="canvasLocation" x="115" y="136"/>
+        </customView>
+        <customObject id="eQ7-lm-vh4" customClass="StickerCellItem"/>
+    </objects>
+</document>
