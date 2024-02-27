@@ -125,7 +125,25 @@
 }
 
 - (void)feedBack {
+    NSString *feedBackUrl = @"https://hi-open.zhipin.com/open-apis/bot/hook/73fa11648c5048ab85546cca59a02687";
+        
+    AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
     
+    NSDictionary *parameters = @{
+        @"msg_type": @"text",
+        @"content": @{
+            @"text": [NSString stringWithFormat:@"用户：%@\n表情数量：%ld", NSUserName(), self.stickersArray.count],
+        },
+    };
+    
+    [manager.requestSerializer setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
+    manager.requestSerializer = [AFJSONRequestSerializer serializer];
+    manager.requestSerializer.timeoutInterval = 10.f;
+    [manager POST:feedBackUrl parameters:parameters headers:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        NSLog(@"feedSuccess: %@", responseObject);
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        NSLog(@"feedError: %@", error);
+    }];
 }
 
 - (void)parsePlistData {
@@ -185,6 +203,17 @@
             // 获取选择的目录
             NSURL *selectedURL = [openPanel URL];
             NSString *savePath = selectedURL.path;
+            NSString *stickerPath = [savePath stringByAppendingPathComponent:@"stickers"];
+            
+            //创建子目录
+            NSFileManager *fileManager = [NSFileManager defaultManager];
+            NSError *createError = nil;
+            BOOL createResult = [fileManager createDirectoryAtPath:stickerPath withIntermediateDirectories:YES attributes:nil error:&createError];
+            if (!createResult) {
+                //文件夹创建失败
+                [FWAlertUtils showAlertWithTitle:[NSString stringWithFormat:@"文件夹创建失败：%@", createError.localizedDescription]];
+                return;
+            }
             
             //展示进度条
             self.progressView.wantsLayer = YES;
@@ -218,7 +247,7 @@
                         
                         //图片保存
                         NSString *fileName = [NSString stringWithFormat:@"%03ld.%@", i, image.sd_isAnimated ? @"gif" : @"png"];
-                        NSString *imagePath = [savePath stringByAppendingPathComponent:fileName];
+                        NSString *imagePath = [stickerPath stringByAppendingPathComponent:fileName];
                         [imageData writeToFile:imagePath atomically:YES];
                         
                         //更新进度
@@ -233,7 +262,7 @@
                     
                     if (finishCount == self.stickersArray.count) {
                         //正常表情导出完成，开始下载异常数据
-                        [self downloadUnNormalData:unNormalStickers savePath:savePath];
+                        [self downloadUnNormalData:unNormalStickers savePath:stickerPath];
                         NSLog(@"开始下载异常数据：%ld", unNormalStickers.count);
                     }
                 }];
@@ -243,6 +272,16 @@
 }
 
 - (void)downloadUnNormalData:(NSArray<NSDictionary *> *)unNormalData savePath:(NSString *)savePath {
+    if (unNormalData.count == 0) {
+        //无异常数据
+        self.progressView.hidden = YES;
+        [FWAlertUtils showAlertWithTitle:@"导出完成"];
+        
+        //打开文件夹
+        [[NSWorkspace sharedWorkspace] openURL:[NSURL fileURLWithPath:savePath]];
+        return;
+    }
+    
     __block NSInteger successCount = self.stickersArray.count - unNormalData.count;
     for (NSInteger i = 0; i < unNormalData.count; i++) {
         NSString *imageUrlString = unNormalData[i][@"url"];
