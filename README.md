@@ -3,4 +3,6 @@
 
 最新包下载[下载地址](https://github.com/zhouxing5311/StickerViewer/releases)
 
+介绍文章[查看地址](https://juejin.cn/post/7340240633999343625)
+
 ![image](./preview.jpg) 
