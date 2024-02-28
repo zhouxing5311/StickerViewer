@@ -125,25 +125,6 @@
 }
 
 - (void)feedBack {
-    NSString *feedBackUrl = @"https://hi-open.zhipin.com/open-apis/bot/hook/73fa11648c5048ab85546cca59a02687";
-        
-    AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
-    
-    NSDictionary *parameters = @{
-        @"msg_type": @"text",
-        @"content": @{
-            @"text": [NSString stringWithFormat:@"用户：%@\n表情数量：%ld", NSUserName(), self.stickersArray.count],
-        },
-    };
-    
-    [manager.requestSerializer setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
-    manager.requestSerializer = [AFJSONRequestSerializer serializer];
-    manager.requestSerializer.timeoutInterval = 10.f;
-    [manager POST:feedBackUrl parameters:parameters headers:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
-        NSLog(@"feedSuccess: %@", responseObject);
-    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
-        NSLog(@"feedError: %@", error);
-    }];
 }
 
 - (void)parsePlistData {
